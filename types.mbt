@@ -63,7 +63,7 @@ priv enum ConstraintKind {
 priv struct Constraint {
   ids : Array[Int32]
   kind : ConstraintKind
-  compliance : Double
+  mut compliance : Double
   mut multiplier : Double
   mut enabled : Bool
 }
