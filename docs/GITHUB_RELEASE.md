@@ -13,8 +13,8 @@
 
 ## 首次推送后验证
 
-1. 公开仓库建议命名 `MoonDeform`，模块名为 `youyong5/moondeform`；以实际创建结果为准。
-2. 在 `moon.mod` 添加真实仓库 URL。
+1. 公开仓库为 [youyong5/MoonDeform](https://github.com/youyong5/MoonDeform)，模块名为 `youyong5/moondeform`。
+2. `moon.mod` 已声明真实仓库 URL。
 3. 检查 GitHub Actions 的 core 与 browser 两个作业，保留实际结果。浏览器失败时先修复，不把本地 Node 检查当作浏览器通过。
 4. 如需在线演示，可将 `dist/` 部署到静态托管；库本身无需后端服务。
 5. Mooncakes 发布是下一阶段，发布后还需验证干净消费项目的远端安装。

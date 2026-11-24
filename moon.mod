@@ -6,6 +6,8 @@ readme = "README.md"
 
 license = "MIT"
 
+repository = "https://github.com/youyong5/MoonDeform"
+
 keywords = [ "physics", "xpbd", "deformable", "2d", "simulation" ]
 
 description = "Renderer-independent 2D XPBD deformable physics with extensible scalar constraints"

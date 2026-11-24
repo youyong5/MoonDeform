@@ -2,7 +2,9 @@
 
 面向 MoonBit 生态的**二维可变形物理库**。以 XPBD 求解粒子、弹性网格与封闭软体的约束，核心不依赖浏览器、Canvas、游戏引擎或外部原生库。
 
-模块名：`youyong5/moondeform`。当前是本地开发版 **0.1.0，尚未发布到 Mooncakes**。
+模块名：`youyong5/moondeform`。当前是开源开发版 **0.1.0，尚未发布到 Mooncakes**。
+
+源码：[youyong5/MoonDeform](https://github.com/youyong5/MoonDeform)。[持续集成结果](https://github.com/youyong5/MoonDeform/actions/workflows/ci.yml)包含核心四后端验证和真实浏览器检查。
 
 ## 核心与生态价值
 
@@ -20,6 +22,8 @@
 安装 MoonBit 官方工具链后，在项目目录执行：
 
 ```sh
+git clone https://github.com/youyong5/MoonDeform.git
+cd MoonDeform
 moon version --all
 moon check --target all --deny-warn
 moon test --target all --deny-warn
