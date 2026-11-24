@@ -74,6 +74,8 @@ ignore(world.add_custom([id], fn(points) {
 
 回调必须是无副作用的纯函数。梯度长度必须与句柄数量一致，所有返回值必须有限。求解／诊断期间，库会拒绝回调对世界进行增删、移动粒子或重入步进。调用方主动抛出的 panic 不属于可恢复的 `PhysicsError`。
 
+完整 [圆形轨道示例](examples/custom_constraint/README.md) 使用自定义回调约束重力下的粒子，并逐帧检查径向误差：`moon run examples/custom_constraint --target native`。
+
 ## 浏览器演示
 
 ```sh
