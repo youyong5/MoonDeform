@@ -11,7 +11,7 @@ moon = os.environ.get('MOON', 'moon')
 
 
 def git_paths(*arguments):
-    output = subprocess.check_output(['git', *arguments, '-z'], cwd=root)
+    output = subprocess.check_output(['git', arguments[0], '-z', *arguments[1:]], cwd=root)
     return [name.decode('utf-8') for name in output.split(b'\0') if name]
 
 
