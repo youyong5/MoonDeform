@@ -23,6 +23,8 @@ commands = [
     [moon, 'run', 'examples/headless', '--target', 'native'],
     [moon, 'run', 'examples/custom_constraint', '--target', 'native'],
     [moon, 'run', 'examples/custom_constraint', '--target', 'js'],
+    [moon, 'run', 'examples/runtime_material', '--target', 'native'],
+    [moon, 'run', 'examples/runtime_material', '--target', 'js'],
     [sys.executable, 'scripts/build_demo.py'],
     ['node', 'scripts/bridge_check.cjs'],
     ['git', 'diff', '--check'],

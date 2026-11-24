@@ -76,6 +76,12 @@ ignore(world.add_custom([id], fn(points) {
 
 完整 [圆形轨道示例](examples/custom_constraint/README.md) 使用自定义回调约束重力下的粒子，并逐帧检查径向误差：`moon run examples/custom_constraint --target native`。
 
+## 运行时材料与诊断
+
+宿主可在帧间调用 `set_constraint_compliance(id, value)` 修改材料，保留拓扑、句柄与目标形状；`constraint_residual(id)` 返回单个约束的有符号残差，禁用项返回 `None`。这支持编辑器调参、批量材料试验和按约束类型监测误差，无需绑定特定产品或渲染器。
+
+[运行时材料示例](examples/runtime_material/README.md) 在同一个受载弹簧上切换两种柔度，再切回硬约束，逐阶段检查理论伸长量：`moon run examples/runtime_material --target native`。
+
 ## 浏览器演示
 
 ```sh

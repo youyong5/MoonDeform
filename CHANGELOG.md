@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Allow material compliance changes between frames without replacing topology or handles.
+- Expose signed residual queries per constraint, skipping disabled callbacks and guarding reentry.
+- Add a runtime material consumer with analytic steady-load checks on native and JavaScript.
+- Extend input-validation, atomic-update and diagnostic-lifecycle regression coverage.
+
 ## 0.1.0 — 2026-11-24 (local development release)
 
 - Port the distance projection from a pinned MIT-licensed PositionBasedDynamics commit.
@@ -18,4 +25,4 @@
 - Add fail-fast local release gates, clean Git-based packaging and contributor documentation.
 - Separate remote core/browser CI jobs and make browser tests own their loopback server lifecycle.
 
-Not yet published to Mooncakes or a remote GitHub repository. Numerical, browser and platform limitations are recorded in docs/VALIDATION.md and README.md.
+The development repository is public on GitHub. Not yet published to Mooncakes. Numerical, browser and platform limitations are recorded in docs/VALIDATION.md and README.md.
