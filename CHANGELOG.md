@@ -5,7 +5,8 @@
 - Allow material compliance changes between frames without replacing topology or handles.
 - Expose signed residual queries per constraint, skipping disabled callbacks and guarding reentry.
 - Add a runtime material consumer with analytic steady-load checks on native and JavaScript.
-- Extend input-validation, atomic-update and diagnostic-lifecycle regression coverage.
+- Extend input-validation, atomic-update and diagnostic-lifecycle regression coverage; 49 tests pass on each of four backends.
+- Detect missing generated interfaces and print canonical review content when source formatting or interfaces drift.
 
 ## 0.1.0 — 2026-11-24 (local development release)
 
