@@ -69,6 +69,7 @@ pub fn World::add_particle(Self, Vec2, mass? : Double, radius? : Double) -> Int3
 pub fn World::add_plane(Self, Vec2, Double) -> Unit raise PhysicsError
 pub fn World::apply_force(Self, Int32, Vec2) -> Unit raise PhysicsError
 pub fn World::constraint_count(Self) -> Int32
+pub fn World::constraint_residual(Self, Int32) -> Double? raise PhysicsError
 pub fn World::grid(Self, Vec2, Int32, Int32, Double, mass? : Double, compliance? : Double, area_compliance? : Double) -> Body raise PhysicsError
 pub fn World::new(config? : Config) -> Self raise PhysicsError
 pub fn World::particle_count(Self) -> Int32
@@ -76,6 +77,7 @@ pub fn World::position(Self, Int32) -> Vec2 raise PhysicsError
 pub fn World::positions(Self) -> Array[Vec2]
 pub fn World::report(Self) -> StepReport raise PhysicsError
 pub fn World::rope(Self, Vec2, Vec2, Int32, mass? : Double, compliance? : Double, bend_compliance? : Double) -> Body raise PhysicsError
+pub fn World::set_constraint_compliance(Self, Int32, Double) -> Unit raise PhysicsError
 pub fn World::set_constraint_enabled(Self, Int32, Bool) -> Unit raise PhysicsError
 pub fn World::set_position(Self, Int32, Vec2) -> Unit raise PhysicsError
 pub fn World::set_velocity(Self, Int32, Vec2) -> Unit raise PhysicsError

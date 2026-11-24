@@ -123,9 +123,7 @@ test "disabled residuals do not evaluate custom callbacks" {
 test "invalid residual queries recover without leaving the world busy" {
   let w = zero_world()
   let p = w.add_particle(@deform.Vec2::new(0.0, 0.0))
-  let c = w.add_custom([p], fn(_) {
-    (0.0 / 0.0, [@deform.Vec2::new(1.0, 0.0)])
-  })
+  let c = w.add_custom([p], fn(_) { (0.0 / 0.0, [@deform.Vec2::new(1.0, 0.0)]) })
   for id in [-1, c, 99] {
     assert_true(
       try {
