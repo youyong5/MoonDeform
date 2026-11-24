@@ -1,0 +1,32 @@
+name: MoonDeform
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install official MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: moon version --all
+      - run: moon fmt --check
+      - run: moon check --target all --deny-warn
+      - run: moon build --target all --deny-warn
+      - run: moon test --target all --deny-warn
+      - run: moon info && git diff --exit-code -- '*.mbti'
+      - run: python3 scripts/upstream_reference.py
+      - run: python3 scripts/consumer_check.py
+      - run: python3 scripts/build_demo.py
+      - run: node scripts/bridge_check.cjs
+      - name: Real browser checks
+        run: |
+          npm install --no-save playwright@1.62.1
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8765 --directory dist &
+          node scripts/browser_check.cjs

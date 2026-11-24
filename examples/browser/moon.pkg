@@ -1,0 +1,7 @@
+import {
+  "youyong5/moondeform" @deform,
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "js"

@@ -91,7 +91,7 @@ std::cout << a.x+ca.x << " " << a.y+ca.y << " " << b.x+cb.x << " " << b.y+cb.y <
     else:
         # Verify all expected coordinate tuples independently of MoonBit formatting.
         import re
-        expected = re.findall(r'position\([ab]\)\.[xy] - \(([^)]+)\)', output.read_text())
+        expected = re.findall(r'position\([ab]\)\.[xy]\s*-\s*\(?\s*(-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)', output.read_text())
         current = [float(x) for row in rows for x in row.split()]
         if len(expected) != len(current) or any(abs(float(a)-b) > 1e-12 for a,b in zip(expected,current)):
             raise SystemExit('Pinned C++ output differs from committed fixture')

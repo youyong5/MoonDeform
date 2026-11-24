@@ -1,0 +1,4 @@
+import {
+  "youyong5/moondeform" @deform,
+}
+options("is-main": true)

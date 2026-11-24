@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoonDeform · 二维可变形物理</title>
+<style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#20312e;background:#f4f5f1;font-synthesis:none}*{box-sizing:border-box}body{margin:0}header{max-width:1280px;margin:auto;padding:30px 36px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dce2d9}.brand{font-size:23px;font-weight:650;letter-spacing:-.8px}.brand span{color:#3d8370}small,.muted{color:#78847b}main{max-width:1280px;margin:auto;padding:34px 36px}h1{font-size:36px;letter-spacing:-1px;margin:0 0 12px;font-weight:600}p{line-height:1.8}section{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:22px;margin-top:28px}.stage{background:#fafbf8;border:1px solid #dbe2d9;border-radius:18px;overflow:hidden;position:relative}canvas{width:100%;height:530px;display:block;touch-action:none}.tag{position:absolute;top:20px;left:20px;background:#fff;padding:8px 12px;border-radius:30px;color:#4e6a60;font-size:12px;pointer-events:none}.hint{position:absolute;bottom:20px;left:20px;font-size:12px;color:#7a887e;pointer-events:none}aside{background:#fff;border:1px solid #dbe2d9;border-radius:18px;padding:22px}.label{font-size:11px;letter-spacing:1.6px;color:#7c8b81;margin:0 0 14px}.tabs{display:flex;gap:8px;flex-wrap:wrap}button{font:inherit;border:1px solid #dce4da;background:transparent;color:#4b5c52;padding:9px 14px;border-radius:9px;cursor:pointer}button.active,button.primary{color:#fff;background:#276e59;border-color:#276e59}button:hover{filter:brightness(.95)}.controls{display:flex;gap:8px;margin-top:22px}.divider{height:1px;background:#edf0eb;margin:24px 0}input{width:100%;accent-color:#276e59;margin:16px 0 8px}dl{margin:0}dl div{display:flex;justify-content:space-between;margin-top:18px;font-size:13px}dt{color:#78847b}dd{margin:0;font-variant-numeric:tabular-nums}.note{font-size:12px;color:#7d897f;line-height:1.9}.error{color:#b13333;font-size:12px}footer{margin-top:24px;display:flex;justify-content:space-between;color:#859086;font-size:12px}@media(max-width:800px){header,main{padding:22px}section{grid-template-columns:1fr}canvas{height:420px}h1{font-size:29px}aside{padding:20px}.stats{display:flex;gap:24px;flex-wrap:wrap}}
+</style>
+<header><div class="brand">Moon<span>Deform</span></div><small>PHYSICS PLAYGROUND / 01</small></header>
+<main>
+<div class="label">FORM, FORCE & MOTION</div><h1>形状会改变，约束始终相连。</h1>
+<p class="muted">拖动节点，观察拉伸、弯曲与面积约束如何共同塑造运动。</p>
+<div class="tabs"><button data-scene="2" class="active">弹性环</button><button data-scene="0">绳索</button><button data-scene="1">弹性网格</button></div>
+<section><div class="stage"><div class="tag" id="scene-tag">AREA + STRETCH + BEND</div><canvas id="view" aria-label="交互物理画布：拖动节点改变形状"></canvas><div class="hint">拖动节点 · 每秒 60 次固定步长模拟</div></div>
+<aside><div class="label">PLAYBACK</div><div class="controls"><button id="play" class="primary">暂停</button><button id="reset">重置</button><button id="step">单步</button></div><div class="divider"></div>
+<div class="label">MATERIAL</div><label for="softness">材料柔度</label><input id="softness" type="range" min="-6" max="-2" step="0.25" value="-4"><div class="note">更小：更硬　／　更大：更柔软<br>更改参数后重新开始模拟。</div><div class="divider"></div>
+<div class="label">LIVE STATE</div><dl class="stats"><div><dt>节点</dt><dd id="count">—</dd></div><div><dt>模拟时间</dt><dd id="time">—</dd></div><div><dt>动能</dt><dd id="energy">—</dd></div></dl><p class="note">网格是二维平面形变模型。圆形与地面为静态障碍；节点之间没有自碰撞。</p><p id="error" class="error" role="status">正在加载求解器…</p></aside></section>
+<footer><span>MoonBit XPBD · 独立计算核心</span><span>MoonDeform 0.1.0</span></footer>
+</main>
+<script>
+const canvas=document.getElementById('view'),ctx=canvas.getContext('2d');
+let running=true,kind=2,state=null,dragId=-1,dragPoint=null,last=0,acc=0;
+const ui=id=>document.getElementById(id),api=()=>globalThis.moonDeform;
+function reset(){api().reset(kind,10**Number(ui('softness').value));state=JSON.parse(api().snapshot());dragId=-1;dragPoint=null;acc=0;}
+function transform(){const box=canvas.getBoundingClientRect();return {w:box.width,h:box.height,s:Math.min(box.width/10,box.height/6),x:box.width/2,y:box.height-36};}
+function worldPoint(e){const b=canvas.getBoundingClientRect(),t=transform();return [(e.clientX-b.left-t.x)/t.s,(t.y-(e.clientY-b.top))/t.s];}
+function draw(){const t=transform(),dpr=devicePixelRatio||1;canvas.width=Math.round(t.w*dpr);canvas.height=Math.round(t.h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,t.w,t.h);ctx.lineWidth=1;ctx.strokeStyle='#e9ede5';
+ for(let x=-5;x<=5;x+=.5){ctx.beginPath();ctx.moveTo(t.x+x*t.s,0);ctx.lineTo(t.x+x*t.s,t.h);ctx.stroke();}for(let y=0;y<=6;y+=.5){ctx.beginPath();ctx.moveTo(0,t.y-y*t.s);ctx.lineTo(t.w,t.y-y*t.s);ctx.stroke();}
+ ctx.fillStyle='#e0e6dc';ctx.fillRect(0,t.y,t.w,t.h-t.y);ctx.beginPath();ctx.arc(t.x,t.y-1.3*t.s,.55*t.s,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b6c6b8';ctx.stroke();if(!state?.points)return;
+ const p=state.points.map(([x,y])=>[t.x+x*t.s,t.y-y*t.s]);if(kind===2){ctx.beginPath();p.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle='#75bca233';ctx.fill();}
+ ctx.lineWidth=kind===1?1.5:2.2;ctx.strokeStyle='#37846b';for(const [a,b] of state.edges){ctx.beginPath();ctx.moveTo(...p[a]);ctx.lineTo(...p[b]);ctx.stroke();}p.forEach(([x,y],i)=>{ctx.beginPath();ctx.arc(x,y,i===dragId?6:3.6,0,Math.PI*2);ctx.fillStyle=i===dragId?'#d5934a':'#26745c';ctx.fill();});
+ ui('count').textContent=p.length;ui('time').textContent=state.time.toFixed(2)+' s';ui('energy').textContent=state.energy.toFixed(3);ui('error').textContent=api().error();}
+function frame(now){const elapsed=last?Math.min((now-last)/1000,.05):0;last=now;if(api()){if(running){acc+=elapsed;while(acc>=1/60){if(dragId>=0&&dragPoint)api().drag(dragId,...dragPoint);api().step();acc-=1/60;}}state=JSON.parse(api().snapshot());draw();}requestAnimationFrame(frame);}
+canvas.addEventListener('pointerdown',e=>{if(!state?.points)return;const q=worldPoint(e);let best=.35;state.points.forEach(([x,y],i)=>{const d=Math.hypot(x-q[0],y-q[1]);if(d<best){best=d;dragId=i;}});if(dragId>=0){dragPoint=q;canvas.setPointerCapture(e.pointerId);}});
+canvas.addEventListener('pointermove',e=>{if(dragId>=0){dragPoint=worldPoint(e);if(!running){api().drag(dragId,...dragPoint);state=JSON.parse(api().snapshot());draw();}}});
+function endDrag(){dragId=-1;dragPoint=null;}canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>{if(!api())return;kind=Number(button.dataset.scene);document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b===button));ui('scene-tag').textContent=['STRETCH + BEND','TRIANGULATED AREA + STRETCH','AREA + STRETCH + BEND'][kind];reset();});
+ui('play').onclick=()=>{running=!running;ui('play').textContent=running?'暂停':'继续';};ui('reset').onclick=()=>api()&&reset();ui('softness').onchange=()=>api()&&reset();ui('step').onclick=()=>{if(!api())return;running=false;ui('play').textContent='继续';api().step();};
+globalThis.addEventListener('moonDeformReady',()=>{ui('error').textContent='';reset();});requestAnimationFrame(frame);
+</script><script src="solver.js"></script>
+</html>
