@@ -1,0 +1,7 @@
+_build/
+.mooncakes/
+node_modules/
+dist/
+tests/consumer/moon.work
+tests/consumer/moon.work.sum
+*.log

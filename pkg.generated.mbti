@@ -1,0 +1,90 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "youyong5/moondeform"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn signed_area(Array[Vec2]) -> Double
+
+// Errors
+pub suberror PhysicsError {
+  InvalidInput(String)
+  InvalidHandle(Int32)
+  NumericalFailure(String)
+}
+pub fn PhysicsError::message(Self) -> String
+
+// Types and methods
+pub(all) struct Body {
+  particles : Array[Int32]
+  constraints : Array[Int32]
+  edges : Array[(Int32, Int32)]
+}
+
+pub(all) struct Config {
+  gravity : Vec2
+  substeps : Int32
+  iterations : Int32
+  damping : Double
+  restitution : Double
+  friction : Double
+}
+pub fn Config::new(gravity? : Vec2, substeps? : Int32, iterations? : Int32, damping? : Double, restitution? : Double, friction? : Double) -> Self
+
+pub(all) struct StepReport {
+  time : Double
+  max_constraint_error : Double
+  kinetic_energy : Double
+  max_speed : Double
+  particle_count : Int32
+  constraint_count : Int32
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Vec2 {
+  x : Double
+  y : Double
+}
+pub fn Vec2::add(Self, Self) -> Self
+pub fn Vec2::dot(Self, Self) -> Double
+pub fn Vec2::equal(Self, Self) -> Bool
+pub fn Vec2::length(Self) -> Double
+pub fn Vec2::new(Double, Double) -> Self
+pub fn Vec2::not_equal(Self, Self) -> Bool
+pub fn Vec2::scale(Self, Double) -> Self
+pub fn Vec2::sub(Self, Self) -> Self
+pub fn Vec2::to_repr(Self) -> @debug.Repr
+
+pub struct World {
+  // private fields
+}
+pub fn World::add_area(Self, Array[Int32], compliance? : Double, rest_area? : Double) -> Int32 raise PhysicsError
+pub fn World::add_bend(Self, Int32, Int32, Int32, compliance? : Double) -> Int32 raise PhysicsError
+pub fn World::add_circle(Self, Vec2, Double) -> Unit raise PhysicsError
+pub fn World::add_custom(Self, Array[Int32], (Array[Vec2]) -> (Double, Array[Vec2]), compliance? : Double) -> Int32 raise PhysicsError
+pub fn World::add_distance(Self, Int32, Int32, compliance? : Double, rest_length? : Double) -> Int32 raise PhysicsError
+pub fn World::add_particle(Self, Vec2, mass? : Double, radius? : Double) -> Int32 raise PhysicsError
+pub fn World::add_plane(Self, Vec2, Double) -> Unit raise PhysicsError
+pub fn World::apply_force(Self, Int32, Vec2) -> Unit raise PhysicsError
+pub fn World::constraint_count(Self) -> Int32
+pub fn World::grid(Self, Vec2, Int32, Int32, Double, mass? : Double, compliance? : Double, area_compliance? : Double) -> Body raise PhysicsError
+pub fn World::new(config? : Config) -> Self raise PhysicsError
+pub fn World::particle_count(Self) -> Int32
+pub fn World::position(Self, Int32) -> Vec2 raise PhysicsError
+pub fn World::positions(Self) -> Array[Vec2]
+pub fn World::report(Self) -> StepReport raise PhysicsError
+pub fn World::rope(Self, Vec2, Vec2, Int32, mass? : Double, compliance? : Double, bend_compliance? : Double) -> Body raise PhysicsError
+pub fn World::set_constraint_enabled(Self, Int32, Bool) -> Unit raise PhysicsError
+pub fn World::set_position(Self, Int32, Vec2) -> Unit raise PhysicsError
+pub fn World::set_velocity(Self, Int32, Vec2) -> Unit raise PhysicsError
+pub fn World::soft_ring(Self, Vec2, Double, Int32, mass? : Double, compliance? : Double, area_compliance? : Double, bend_compliance? : Double) -> Body raise PhysicsError
+pub fn World::step(Self, Double) -> StepReport raise PhysicsError
+pub fn World::time(Self) -> Double
+pub fn World::velocity(Self, Int32) -> Vec2 raise PhysicsError
+
+// Type aliases
+pub type ConstraintFunction = (Array[Vec2]) -> (Double, Array[Vec2])
+
+// Traits
