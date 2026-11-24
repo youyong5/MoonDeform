@@ -13,6 +13,8 @@ python3 scripts/check_release.py
 
 Set `MOON` to an absolute executable path if needed. Tests cover all declared core backends; the browser adapter is JavaScript-only. `check_release.py` stops on the first failure and performs no remote writes.
 
+The release gate also runs the headless soft-body example on native and the [custom circular-guide example](examples/custom_constraint/README.md) on native and JavaScript. The latter fails if its measured radial error exceeds its bound. CI gives each job a 15-minute deadline and cancels superseded runs for the same ref, so repeated pushes do not keep obsolete validations running.
+
 After changing the public API, run `moon info` and commit generated `.mbti` changes. The release gate deliberately fails on an uncommitted generated interface difference. Do not edit these files manually.
 
 ## Physics changes
