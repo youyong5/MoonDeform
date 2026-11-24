@@ -12,12 +12,10 @@ root = Path(__file__).resolve().parents[1]
 moon = os.environ.get('MOON', 'moon')
 commands = [
     [moon, 'version', '--all'],
-    [moon, 'fmt', '--check'],
+    [sys.executable, 'scripts/check_generated.py'],
     [moon, 'check', '--target', 'all', '--deny-warn'],
     [moon, 'build', '--target', 'all', '--deny-warn'],
     [moon, 'test', '--target', 'all', '--deny-warn'],
-    [moon, 'info'],
-    ['git', 'diff', '--exit-code', '--', '*.mbti'],
     [sys.executable, 'scripts/upstream_reference.py'],
     [sys.executable, 'scripts/consumer_check.py'],
     [moon, 'run', 'examples/headless', '--target', 'native'],
