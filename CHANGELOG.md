@@ -10,4 +10,12 @@
 - Add C++ reference fixtures, finite-difference gradient validation and independent API consumer.
 - Add a static playground compiled from the same MoonBit library.
 
+### GitHub preparation review
+
+- Stabilize signed area under large world translations and vector norms across numerical scales.
+- Reject overflowing normalized planes and bend rest geometry before retaining invalid state.
+- Add physical steady-load checks at two timestep/iteration settings; 37 tests pass on each core backend.
+- Add fail-fast local release gates, clean Git-based packaging and contributor documentation.
+- Separate remote core/browser CI jobs and make browser tests own their loopback server lifecycle.
+
 Not yet published to Mooncakes or a remote GitHub repository. Numerical, browser and platform limitations are recorded in docs/VALIDATION.md and README.md.

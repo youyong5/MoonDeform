@@ -1,0 +1,41 @@
+# Contributing
+
+MoonDeform accepts changes to the reusable simulation library, its independent consumers and its verification evidence.
+
+## Development
+
+Install the official MoonBit toolchain, Python 3, Node.js, and a C++ compiler for the pinned upstream reference check. The library runtime itself has no third-party dependencies.
+
+```sh
+moon version --all
+python3 scripts/check_release.py
+```
+
+Set `MOON` to an absolute executable path if needed. Tests cover all declared core backends; the browser adapter is JavaScript-only. `check_release.py` stops on the first failure and performs no remote writes.
+
+After changing the public API, run `moon info` and commit generated `.mbti` changes. The release gate deliberately fails on an uncommitted generated interface difference. Do not edit these files manually.
+
+## Physics changes
+
+- State the constraint residual, gradient and units, with the intended degeneracy behavior.
+- Validate new analytic gradients with independent finite differences.
+- Add a physical or reference case that would fail for a wrong equation. A scene that merely stays finite is not sufficient accuracy evidence.
+- Keep upstream version, notices and intentional deviations in `docs/PROVENANCE.md` current.
+- Avoid claiming timestep independence, self-collision, inversion prevention or cross-platform bitwise equality beyond the evidence available.
+
+## Host integration and browser
+
+Public consumers must use the exported API rather than solver-private fields. Preserve the separation between simulation, topology and rendering. Core correctness must remain testable without a browser.
+
+```sh
+python3 scripts/build_demo.py
+npm install --no-save playwright@1.62.1
+npx playwright install chromium
+node scripts/browser_check.cjs
+```
+
+The browser script starts and closes its own loopback static server. Set `DEMO_URL` only when deliberately testing an already running server. The script covers the static site and the single-file artifact; a Node bridge test is not a substitute for browser rendering and pointer interaction.
+
+## Reporting problems
+
+Include the toolchain version, backend, scene construction, parameters, timestep and a minimal reproduction. For numerical problems include the expected invariant or reference behavior and the first failing frame. Please state whether self-collision or CCD, which are outside 0.1.0, is required by the example.

@@ -14,7 +14,7 @@ shutil.copy2(root / '_build/js/release/build/examples/browser/browser.js', outpu
 print('Static demo: dist/index.html (serve dist/ with python3 -m http.server 8765)')
 
 # A single-file distribution for opening directly from disk.
-html = (output / 'index.html').read_text()
-solver = (output / 'solver.js').read_text().replace('</script', '<\\/script')
-(output / 'MoonDeform-demo.html').write_text(html.replace('<script src="solver.js"></script>', '<script>' + solver + '</script>'))
+html = (output / 'index.html').read_text(encoding='utf-8')
+solver = (output / 'solver.js').read_text(encoding='utf-8').replace('</script', r'<\/script')
+(output / 'MoonDeform-demo.html').write_text(html.replace('<script src="solver.js"></script>', '<script>' + solver + '</script>'), encoding='utf-8')
 print('Standalone demo: dist/MoonDeform-demo.html')

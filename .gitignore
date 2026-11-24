@@ -5,3 +5,7 @@ dist/
 tests/consumer/moon.work
 tests/consumer/moon.work.sum
 *.log
+artifacts/
+package-lock.json
+__pycache__/
+history.bundle

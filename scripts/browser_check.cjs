@@ -1,24 +1,43 @@
-// Optional real-browser test: npm install --no-save playwright@1.62.1
-// npx playwright install chromium
-// Start: python3 -m http.server 8765 --directory dist
+// Optional browser gate. Requires Playwright and its Chromium installation.
+// Starts an ephemeral loopback server unless DEMO_URL is explicitly supplied.
 const {chromium} = require('playwright');
 const assert = require('node:assert/strict');
-(async () => {
-  const options = {headless:true};
-  if (process.env.CHROMIUM_PATH) options.executablePath = process.env.CHROMIUM_PATH;
-  const browser = await chromium.launch(options);
+const http = require('node:http');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+
+async function serve() {
+  const root = path.resolve(__dirname, '../dist');
+  const server = http.createServer(async (req, res) => {
+    try {
+      const relative = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+      const file = path.resolve(root, '.' + (relative === '/' ? '/index.html' : relative));
+      if (!file.startsWith(root + path.sep)) { res.writeHead(403); res.end(); return; }
+      const data = await fs.readFile(file);
+      res.setHeader('Content-Type', file.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/html; charset=utf-8');
+      res.end(data);
+    } catch { res.writeHead(404); res.end(); }
+  });
+  await new Promise((resolve,reject) => {
+    server.once('error',reject);
+    server.listen(0,'127.0.0.1',resolve);
+  });
+  return {server,url:`http://127.0.0.1:${server.address().port}`};
+}
+
+async function exercise(browser, url, mobile) {
+  const page = await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1280,height:900}});
   try {
-    const page = await browser.newPage({viewport:{width:1280,height:900}});
     const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
-    await page.goto(process.env.DEMO_URL || 'http://127.0.0.1:8765');
+    await page.goto(url);
     await page.waitForFunction(() => !!globalThis.moonDeform);
     await page.locator('#play').click();
     for (const kind of [0,1,2]) {
       await page.locator(`[data-scene="${kind}"]`).click();
       const result = await page.evaluate(kind => {
         const api = globalThis.moonDeform;
-        api.reset(kind, 1e-4);
+        api.reset(kind,1e-4);
         for (let i=0;i<360;i++) api.step();
         return {error:api.error(),state:JSON.parse(api.snapshot())};
       },kind);
@@ -26,7 +45,13 @@ const assert = require('node:assert/strict');
       assert.ok(result.state.points.every(p=>p.every(Number.isFinite)));
     }
     await page.locator('[data-scene="2"]').click();
-    // Test actual pointer coordinate conversion while paused.
+    await page.locator('#step').click();
+    const first = await page.evaluate(()=>JSON.parse(moonDeform.snapshot()).time);
+    await page.locator('#step').click();
+    const second = await page.evaluate(()=>JSON.parse(moonDeform.snapshot()).time);
+    assert.ok(Math.abs(second-first-1/60)<1e-9);
+    // Mobile controls are below the canvas; return to the visible drag target.
+    await page.locator('#view').scrollIntoViewIfNeeded();
     const point = await page.evaluate(() => {
       const p=JSON.parse(moonDeform.snapshot()).points[5];
       const b=document.getElementById('view').getBoundingClientRect();
@@ -40,9 +65,28 @@ const assert = require('node:assert/strict');
     await page.mouse.up();
     const after = await page.evaluate(()=>JSON.parse(moonDeform.snapshot()).points[5]);
     assert.ok(Math.hypot(after[0]-before[0],after[1]-before[1])>0.1);
-    await page.setViewportSize({width:390,height:844});
+    await page.locator('#softness').focus();
+    await page.locator('#softness').press('ArrowRight');
+    await page.locator('#reset').click();
+    assert.equal(await page.locator('#error').innerText(),'');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.deepEqual(errors,[]);
-    console.log('Browser scene switching, simulation, pointer drag and mobile layout passed.');
-  } finally { await browser.close(); }
-})().catch(e=>{console.error(e);process.exit(1);});
+  } finally { await page.close(); }
+}
+
+(async () => {
+  let local, browser;
+  try {
+    if (!process.env.DEMO_URL) local=await serve();
+    const base=(process.env.DEMO_URL||local.url).replace(/\/$/,'');
+    const options={headless:true};
+    if(process.env.CHROMIUM_PATH)options.executablePath=process.env.CHROMIUM_PATH;
+    browser=await chromium.launch(options);
+    await exercise(browser,base+'/',false);
+    await exercise(browser,base+'/MoonDeform-demo.html',true);
+    console.log('Desktop static site and mobile single-file browser checks passed.');
+  } finally {
+    if(browser)await browser.close();
+    if(local)await new Promise(resolve=>local.server.close(resolve));
+  }
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -94,6 +94,9 @@ python3 -m http.server 8765 --directory dist
 
 ## 验证与维护
 
+推荐执行 `python3 scripts/check_release.py`，任一步失败即停止。当前四个核心后端各有 **37 项测试**通过，其中一项包含 40 组固定上游距离投影对照。受载弹簧还在两组时间步／迭代参数下验证了稳态伸长解析值。
+
+
 ```sh
 moon fmt --check
 moon check --target all --deny-warn
@@ -107,7 +110,7 @@ node scripts/bridge_check.cjs
 
 上游对照脚本需要 Python 与 C++ 编译器，仅用于维护，不是库的运行依赖。可选真实浏览器测试见 `scripts/browser_check.cjs`。CI 工作流已提供；远程执行状态与本地验证是分开记录的。
 
-更多资料：[架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
+更多资料：[贡献指南](CONTRIBUTING.md) · [首次 GitHub 发布](docs/GITHUB_RELEASE.md) · [架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
 
 ## License
 

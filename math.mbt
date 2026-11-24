@@ -39,7 +39,16 @@ pub fn Vec2::dot(self : Vec2, other : Vec2) -> Double {
 
 ///|
 pub fn Vec2::length(self : Vec2) -> Double {
-  self.dot(self).sqrt()
+  let scale = self.x.abs().max(self.y.abs())
+  if scale == 0.0 {
+    return 0.0
+  }
+  if !finite(scale) {
+    return scale
+  }
+  let x = self.x / scale
+  let y = self.y / scale
+  scale * (x * x + y * y).sqrt()
 }
 
 ///|
@@ -60,9 +69,15 @@ fn cross(a : Vec2, b : Vec2) -> Double {
 ///|
 /// Signed area, positive for counterclockwise vertices in Cartesian coordinates.
 pub fn signed_area(points : Array[Vec2]) -> Double {
+  if points.length() < 3 {
+    return 0.0
+  }
+  // Translate to a local origin before multiplying coordinates. This avoids
+  // subtracting nearly equal world-coordinate products for distant models.
+  let origin = points[0]
   let mut a = 0.0
-  for i in 0..<points.length() {
-    a += cross(points[i], points[(i + 1) % points.length()]) * 0.5
+  for i in 1..<(points.length() - 1) {
+    a += cross(points[i].sub(origin), points[i + 1].sub(origin)) * 0.5
   }
   a
 }

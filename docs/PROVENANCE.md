@@ -12,6 +12,8 @@
 
 Deliberate differences: near-coincident distance endpoints use a deterministic x axis rather than the upstream no-op; denominator tolerances differ; public inputs and numerical failures are validated. The 40-case C++ differential fixture covers nondegenerate distance projections only and does not establish equivalence for all constraints or trajectories.
 
+The GitHub-preparation review adds scaled vector norms and local-origin signed-area evaluation to reduce avoidable overflow, underflow and translation cancellation. These are numerical implementation improvements, not new XPBD equations.
+
 `scripts/upstream_reference.py` extracts the verbatim distance function from the pinned source, supplies a minimal double-precision vector shim, and runs 40 configurations. It does not compile the complete upstream project. The fixture is checked into `upstream_distance_wbtest.mbt` and compared by MoonBit tests.
 
 ## Research reference

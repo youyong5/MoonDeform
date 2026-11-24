@@ -254,14 +254,17 @@ pub fn World::add_bend(
   check_compliance(compliance)
   let u = self.particles[a].position.sub(self.particles[b].position)
   let v = self.particles[c].position.sub(self.particles[b].position)
-  if u.length() < 1.0e-10 || v.length() < 1.0e-10 {
+  if !finite_vec(u) ||
+    !finite_vec(v) ||
+    u.length() < 1.0e-10 ||
+    v.length() < 1.0e-10 {
     raise InvalidInput("bend has a zero-length arm")
   }
-  self.insert_constraint(
-    [a, b, c],
-    Bend(@math.atan2(cross(u, v), u.dot(v))),
-    compliance,
-  )
+  let rest = @math.atan2(cross(u, v), u.dot(v))
+  if !finite(rest) || !finite(cross(u, v)) || !finite(u.dot(v)) {
+    raise InvalidInput("bend geometry exceeds the numerical range")
+  }
+  self.insert_constraint([a, b, c], Bend(rest), compliance)
 }
 
 ///|
@@ -305,6 +308,9 @@ pub fn World::add_plane(
   let n = normal.length()
   if !finite_vec(normal) || !finite(n) || n < 1.0e-12 || !finite(offset) {
     raise InvalidInput("invalid plane")
+  }
+  if !finite(offset / n) {
+    raise InvalidInput("normalized plane offset overflows")
   }
   self.colliders.push(Plane(normal.scale(1.0 / n), offset / n))
 }
