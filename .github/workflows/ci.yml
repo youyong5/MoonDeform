@@ -57,8 +57,27 @@ jobs:
           name: release-browser-evidence
           path: artifacts/browser-gates.json
           if-no-files-found: error
+  registry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install official MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Install and consume the published release from Mooncakes
+        run: python3 scripts/registry_check.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: registry-consumer-evidence
+          path: artifacts/registry-consumer.json
+          if-no-files-found: error
   candidate:
-    needs: [core, browser]
+    needs: [core, browser, registry]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
