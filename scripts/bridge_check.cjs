@@ -23,6 +23,31 @@ for (const kind of [0, 1, 2]) {
   api.drag(movable, 0.3, 4.0);
   state = JSON.parse(api.snapshot());
   assert.deepEqual(state.points[movable], [0.3, 4]);
+  const beforeTune = state;
+  api.tune(3e-4);
+  state = JSON.parse(api.snapshot());
+  assert.equal(api.error(), '');
+  assert.deepEqual(state.points, beforeTune.points);
+  assert.deepEqual(state.edges, beforeTune.edges);
+  assert.equal(state.time, beforeTune.time);
+  assert.equal(state.energy, beforeTune.energy);
+  assert.equal(state.stretch_error, beforeTune.stretch_error);
+  assert.equal(state.material.distance, 3e-4);
+  assert.equal(state.material.area, kind === 0 ? null : 3e-4 * (kind === 1 ? .1 : .01));
+  assert.equal(state.material.bend, beforeTune.material.bend);
+  for (const invalid of [-1, NaN, Infinity]) {
+    api.tune(invalid);
+    assert.match(api.error(), /finite and nonnegative/);
+    assert.deepEqual(JSON.parse(api.snapshot()), state);
+  }
+  api.tune(0);
+  assert.equal(api.error(), '');
+  api.step();
+  state = JSON.parse(api.snapshot());
+  assert.equal(api.error(), '');
+  assert.ok(state.time > beforeTune.time);
+  assert.ok(Number.isFinite(state.stretch_error));
+  assert.ok(state.points.every(p => p.every(Number.isFinite)));
   results.push({kind, particles:state.points.length, steps:360, milliseconds:Number(ms.toFixed(2))});
 }
 api.reset(2, -1);

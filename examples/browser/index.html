@@ -12,8 +12,8 @@
 <div class="tabs"><button data-scene="2" class="active">弹性环</button><button data-scene="0">绳索</button><button data-scene="1">弹性网格</button></div>
 <section><div class="stage"><div class="tag" id="scene-tag">AREA + STRETCH + BEND</div><canvas id="view" aria-label="交互物理画布：拖动节点改变形状"></canvas><div class="hint">拖动节点 · 每秒 60 次固定步长模拟</div></div>
 <aside><div class="label">PLAYBACK</div><div class="controls"><button id="play" class="primary">暂停</button><button id="reset">重置</button><button id="step">单步</button></div><div class="divider"></div>
-<div class="label">MATERIAL</div><label for="softness">材料柔度</label><input id="softness" type="range" min="-6" max="-2" step="0.25" value="-4"><div class="note">更小：更硬　／　更大：更柔软<br>更改参数后重新开始模拟。</div><div class="divider"></div>
-<div class="label">LIVE STATE</div><dl class="stats"><div><dt>节点</dt><dd id="count">—</dd></div><div><dt>模拟时间</dt><dd id="time">—</dd></div><div><dt>动能</dt><dd id="energy">—</dd></div></dl><p class="note">网格是二维平面形变模型。圆形与地面为静态障碍；节点之间没有自碰撞。</p><p id="error" class="error" role="status">正在加载求解器…</p></aside></section>
+<div class="label">MATERIAL</div><label for="softness">拉伸柔度 <output id="softness-value">1.00e-4</output></label><input id="softness" type="range" min="-6" max="-2" step="0.25" value="-4"><div class="note">更小：更硬　／　更大：更柔软<br>即时生效，保留当前位置与运动。面积柔度按场景比例联动，弯曲柔度独立。</div><div class="divider"></div>
+<div class="label">LIVE STATE</div><dl class="stats"><div><dt>节点</dt><dd id="count">—</dd></div><div><dt>模拟时间</dt><dd id="time">—</dd></div><div><dt>动能</dt><dd id="energy">—</dd></div><div><dt>拉伸残差</dt><dd id="stretch-error">—</dd></div></dl><p class="note">网格是二维平面形变模型。圆形与地面为静态障碍；节点之间没有自碰撞。</p><p id="error" class="error" role="status">正在加载求解器…</p></aside></section>
 <footer><span>MoonBit XPBD · 独立计算核心</span><span>MoonDeform 0.1.0</span></footer>
 </main>
 <script>
@@ -28,13 +28,13 @@ function draw(){const t=transform(),dpr=devicePixelRatio||1;canvas.width=Math.ro
  ctx.fillStyle='#e0e6dc';ctx.fillRect(0,t.y,t.w,t.h-t.y);ctx.beginPath();ctx.arc(t.x,t.y-1.3*t.s,.55*t.s,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b6c6b8';ctx.stroke();if(!state?.points)return;
  const p=state.points.map(([x,y])=>[t.x+x*t.s,t.y-y*t.s]);if(kind===2){ctx.beginPath();p.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle='#75bca233';ctx.fill();}
  ctx.lineWidth=kind===1?1.5:2.2;ctx.strokeStyle='#37846b';for(const [a,b] of state.edges){ctx.beginPath();ctx.moveTo(...p[a]);ctx.lineTo(...p[b]);ctx.stroke();}p.forEach(([x,y],i)=>{ctx.beginPath();ctx.arc(x,y,i===dragId?6:3.6,0,Math.PI*2);ctx.fillStyle=i===dragId?'#d5934a':'#26745c';ctx.fill();});
- ui('count').textContent=p.length;ui('time').textContent=state.time.toFixed(2)+' s';ui('energy').textContent=state.energy.toFixed(3);ui('error').textContent=api().error();}
+ ui('count').textContent=p.length;ui('time').textContent=state.time.toFixed(2)+' s';ui('energy').textContent=state.energy.toFixed(3);ui('stretch-error').textContent=state.stretch_error.toExponential(2);ui('softness-value').textContent=state.material.distance.toExponential(2);ui('error').textContent=api().error();}
 function frame(now){const elapsed=last?Math.min((now-last)/1000,.05):0;last=now;if(api()){if(running){acc+=elapsed;while(acc>=1/60){if(dragId>=0&&dragPoint)api().drag(dragId,...dragPoint);api().step();acc-=1/60;}}state=JSON.parse(api().snapshot());draw();}requestAnimationFrame(frame);}
 canvas.addEventListener('pointerdown',e=>{if(!state?.points)return;const q=worldPoint(e);let best=.35;state.points.forEach(([x,y],i)=>{const d=Math.hypot(x-q[0],y-q[1]);if(d<best){best=d;dragId=i;}});if(dragId>=0){dragPoint=q;canvas.setPointerCapture(e.pointerId);}});
 canvas.addEventListener('pointermove',e=>{if(dragId>=0){dragPoint=worldPoint(e);if(!running){api().drag(dragId,...dragPoint);state=JSON.parse(api().snapshot());draw();}}});
 function endDrag(){dragId=-1;dragPoint=null;}canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
 document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>{if(!api())return;kind=Number(button.dataset.scene);document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b===button));ui('scene-tag').textContent=['STRETCH + BEND','TRIANGULATED AREA + STRETCH','AREA + STRETCH + BEND'][kind];reset();});
-ui('play').onclick=()=>{running=!running;ui('play').textContent=running?'暂停':'继续';};ui('reset').onclick=()=>api()&&reset();ui('softness').onchange=()=>api()&&reset();ui('step').onclick=()=>{if(!api())return;running=false;ui('play').textContent='继续';api().step();};
+ui('play').onclick=()=>{running=!running;ui('play').textContent=running?'暂停':'继续';};ui('reset').onclick=()=>api()&&reset();ui('softness').oninput=()=>{if(!api())return;api().tune(10**Number(ui('softness').value));state=JSON.parse(api().snapshot());draw();};ui('step').onclick=()=>{if(!api())return;running=false;ui('play').textContent='继续';api().step();};
 globalThis.addEventListener('moonDeformReady',()=>{ui('error').textContent='';reset();});requestAnimationFrame(frame);
 </script><script src="solver.js"></script>
 </html>
