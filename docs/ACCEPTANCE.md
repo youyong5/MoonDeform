@@ -37,8 +37,14 @@
 | GitHub 公开、开发记录清晰 | 公开 `main`，按库能力、宿主示例和验证成果提交 |
 | 声明的核心功能可用 | 数值依据、边界与模块划分见 README、`API.md`、`DESIGN.md` |
 | 安装与复现文档 | README 与 INSTALL 提供真实注册表安装、公开 API 示例和源码接入；干净消费已运行 |
-| 持续检查、构建与测试 | core / browser / candidate 已实际通过；新增 registry 作业持续检查已发布版本，实际运行链接追加于本页 |
+| 持续检查、构建与测试 | core / browser / registry / candidate 四作业全部成功，见下方本批验证链接 |
 | 至少一个可运行示例 | headless、custom_constraint、runtime_material、独立消费模块和静态演示 |
 | 核心功能测试 | 四后端测试、上游距离投影对照、解析参考、回调与失败恢复检查 |
 | Mooncakes 发布 | 0.1.0 已发布，注册表查询与外部安装、运行独立通过 |
 | 开源与上游许可 | MIT；固定上游源码、许可证和改动说明见 `PROVENANCE.md` |
+
+## 第三批远程验证结果
+
+[完整 CI 运行](https://github.com/youyong5/MoonDeform/actions/runs/45585871982)对应提交 `ddf3ba5685fe9c5d6d1d49589031d4b073ffc0b2`。core、browser、registry、candidate 四作业全部成功：官方 stable 工具链 `moon 0.1.20261119` / `moonc v0.10.22+124d61d05`，四后端各 52 项测试通过；桌面与移动页面交互、已发布版本的独立安装消费、交付候选导出均完成。注册表消费证据见同次运行的 [registry-consumer-evidence](https://github.com/youyong5/MoonDeform/actions/runs/45585871982/artifacts/15008049111)。
+
+九项开发交付要求均已有对应实现或可复核证据；这份检查不代替赛事评委的最终评审结论。

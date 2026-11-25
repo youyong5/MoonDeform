@@ -111,3 +111,5 @@ moonrun 0.1.20261104 (940aa18 2026-11-04)
 下载的模块清单、包清单、公开接口及六个核心实现文件，与发布来源提交 `827103b4675e3b51be864070b177af7afc4444cb` 一致。发布来自 Windows，比较仅把 CRLF 规范化为 LF；记录不是原始 ZIP 的哈希。固定版本指纹在 `tests/registry/0.1.0.json`，完整重现入口是 `scripts/registry_check.py`，成功结果在 `artifacts/registry-consumer.json`。后续维护提交新增的脚本、消费案例与文档不属于已上传的 0.1.0 源码归档。
 
 CI 新增独立 registry 作业，实际下载并构建／运行该不可变版本，上传 `registry-consumer-evidence`；candidate 需 core、browser、registry 全部成功。当前源码的四后端物理测试仍由 core 作业验证，不以已发布版本消费代替开发源码测试。
+
+第三批远程验证在 [运行 45585871982](https://github.com/youyong5/MoonDeform/actions/runs/45585871982) 全部成功，对应提交 `ddf3ba5685fe9c5d6d1d49589031d4b073ffc0b2`。core 使用官方 stable `moon 0.1.20261119` / `moonc v0.10.22+124d61d05`，四后端各 52 项通过；registry 在干净 CI 环境实际消费 0.1.0 的 native / JS，浏览器交互与 candidate 导出也通过。消费证据作为独立 `registry-consumer-evidence` 产物上传。
