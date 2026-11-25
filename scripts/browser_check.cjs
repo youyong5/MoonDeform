@@ -99,6 +99,7 @@ async function exercise(browser, url, mobile) {
     await exercise(browser,base+'/',false);
     await exercise(browser,base+'/MoonDeform-demo.html',true);
     console.log('Desktop static site and mobile single-file browser checks passed.');
+    console.log(JSON.stringify({result:'passed',browser:browser.version(),scenarios:['desktop-static','mobile-standalone']}));
   } finally {
     if(browser)await browser.close();
     if(local)await new Promise(resolve=>local.server.close(resolve));
