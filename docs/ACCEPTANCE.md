@@ -17,7 +17,7 @@
 - [x] 运行实际 `moon package --frozen`，审查归档内容，并在干净解压目录运行 native / JS 消费及重新编译的演示；本地打包检查通过。服务器 dry-run 因未登录停在身份检查，移入第三批，不计为通过。
 - [x] 发布包从清单读取版本，删除旧的外部发布状态布尔值，绑定提交／源码／演示／归档与真实浏览器证据，生成内部校验清单。
 - [x] 从实际注册表归档的干净源码重编演示，导出本地候选包，解压运行 headless 示例并恢复完整 Git 历史成功。
-- [ ] 记录新 core / browser / candidate 三作业全部成功及其可下载交付包，关闭本批。
+- [x] 新 core / browser / candidate 三作业均成功，[验证运行及候选产物](https://github.com/youyong5/MoonDeform/actions/runs/45578351621)对应提交 `51efcbf9f65a2d09327c000eeb1b6da4186e43aa`；`release-candidate` 已上传 ZIP、SHA-256 和元数据，本批发布候选交付完成。
 
 ## 第三批：Mooncakes 发布与远端消费验收
 

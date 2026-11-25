@@ -30,7 +30,7 @@ moon -C app run . --target js
 
 GitHub Actions 的 `release-candidate` 产物包含一个 `MoonDeform-<版本>-<提交前缀>-candidate.zip`、对应外部 SHA-256 文件及 `release-candidate.json`。
 
-解压后进入 `MoonDeform/`：
+先解压 GitHub 下载的产物 ZIP，再解压其中名称以 `-candidate.zip` 结尾的文件，进入 `MoonDeform/`：
 
 ```sh
 moon run examples/headless --target native

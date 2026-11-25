@@ -98,4 +98,4 @@ moonrun 0.1.20261104 (940aa18 2026-11-04)
 
 本地候选包已实际生成并解压运行 headless 示例，得到 16 粒子、33 约束和约 4 秒模拟；`history.bundle` 在新仓库中恢复到包内声明的原提交成功。候选包内部内容校验值在生成时核对。该本地包如实标注没有本提交的真实浏览器记录，不能替代新的远程 candidate 作业产物。
 
-`moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`，尚未执行服务器校验，也没有进行发布。服务器 dry-run 与注册表安装继续留在第三批。新 CI 的 core / browser / candidate 结果及下载产物需运行成功后补充。
+`moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`，尚未执行服务器校验，也没有进行发布。服务器 dry-run 与注册表安装继续留在第三批。新 CI 的 core / browser / candidate 在 [该批运行](https://github.com/youyong5/MoonDeform/actions/runs/45578351621)中全部成功，对应提交 `51efcbf9f65a2d09327c000eeb1b6da4186e43aa`。候选作业在下载并核对同次运行的真实 Chromium 证据后，实际生成 `MoonDeform-0.1.0-51efcbf9f65a-candidate.zip`（315445 字节，SHA-256 `a63deeeec0e07d634724894abd87332726ef44173289a0bc0dd5bc567ca20d80`），包内浏览器状态为 passed；外部 `release-candidate` 产物已上传候选 ZIP、校验文件和元数据。后续提交由 CI 重新生成各自的指纹与候选，不复用本次文件。
