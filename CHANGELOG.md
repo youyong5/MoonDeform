@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.1.0 candidate — 2026-11-25 (not yet published)
+## Unreleased
+
+- Add a fresh Mooncakes consumer gate for the immutable 0.1.0 release, with native / JS builds, runtime checks and published-source fingerprints.
+- Extend the public-API consumer with a 240-frame soft-ring/plane-contact smoke case.
+- Record publication, verified installation and final acceptance evidence. These maintenance changes follow the published source commit.
+
+## 0.1.0 — 2026-11-25
+
+Published to Mooncakes from `827103b4675e3b51be864070b177af7afc4444cb`. The following features are included in the release.
 
 - Audit the real registry archive and verify independent consumers and rebuilt demos from a clean extraction.
 - Bind release candidates to exact source, commit, demo and Chromium evidence; add content checksums.
@@ -34,4 +42,4 @@
 - Add fail-fast local release gates, clean Git-based packaging and contributor documentation.
 - Separate remote core/browser CI jobs and make browser tests own their loopback server lifecycle.
 
-The development repository is public on GitHub. Not yet published to Mooncakes. Numerical, browser and platform limitations are recorded in docs/VALIDATION.md and README.md.
+The repository is public on GitHub and version 0.1.0 is available on Mooncakes. Numerical, browser and platform limitations are recorded in docs/VALIDATION.md and README.md.

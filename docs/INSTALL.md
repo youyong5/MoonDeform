@@ -1,6 +1,6 @@
 # 安装与独立接入
 
-模块为 `youyong5/moondeform`，首个计划发布版本为 `0.1.0`。当前可使用 GitHub 源码或发布候选中的源码；Mooncakes 发布及注册表安装验收尚未完成。不要把下面的发布后步骤当成当前已发布的证明。
+模块为 `youyong5/moondeform`，首个公开版本 `0.1.0` 已于 2026-11-25 发布。已从干净外部项目实际下载并完成 native / JS 检查、构建与运行。
 
 ## 工具与依赖
 
@@ -39,9 +39,9 @@ moon run examples/runtime_material --target js
 
 `dist/MoonDeform-demo.html` 可直接打开。若需独立模块消费，可将上面的 `library` 路径替换为解压后的 `MoonDeform`。候选包结构与证据说明见 [RELEASE](RELEASE.md)。
 
-## Mooncakes 接入：发布完成后执行
+## Mooncakes 接入
 
-仅在第三批已经确认 `0.1.0` 发布后，在新项目中运行：
+在已有 MoonBit 项目根目录运行；如需新建，可先执行 `moon new my-simulation` 并进入该目录：
 
 ```sh
 moon add youyong5/moondeform@0.1.0
@@ -55,4 +55,6 @@ import {
 }
 ```
 
-随后使用 README 中的公开 API 示例。最终注册表验收必须从干净项目实际下载指定版本，验证 native 和 JS 消费；本地 workspace、解压候选包及服务器 dry-run 都不能替代这一项。
+随后使用 README 中的公开 API 示例。也可复制仓库的 `tests/consumer/main.mbt` 和 `moon.pkg` 到新项目中执行 `moon run . --target native`、`moon run . --target js`。该入口检查自定义约束、元数据、柔度修改、残差和 240 帧弹性环落地。
+
+维护者执行 `python3 scripts/registry_check.py` 可重现注册表检查，结果写入 `artifacts/registry-consumer.json`。脚本创建无 workspace／缓存的临时项目，实际 `moon add` 指定版本，检查 `moon tree --json` 的 registry 来源，并核对已发布核心源码的 LF 规范化 SHA-256。它固定验证不可变的 0.1.0；当前开发源码通过独立的 workspace 检查。

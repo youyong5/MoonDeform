@@ -1,6 +1,6 @@
-# 0.1.0 发布候选与交付包
+# 0.1.0 发布与交付包
 
-当前阶段是首个公开版本的发布准备；本文件不表示 Mooncakes 已发布。版本、模块名、许可证与仓库地址从 `moon.mod` 读取，打包脚本不再写死旧版本或“尚未推送 GitHub”等外部状态。
+0.1.0 已于 2026-11-25 发布到 [Mooncakes](https://mooncakes.io/docs/youyong5/moondeform@0.1.0/)，来源提交为 `827103b4675e3b51be864070b177af7afc4444cb`。后续提交补充验证脚本与文档，不改变注册表上的不可变版本。版本、模块名、许可证与仓库地址仍从 `moon.mod` 读取；候选生成脚本本身不执行发布。
 
 ## 两种归档
 
@@ -35,7 +35,7 @@ python3 scripts/package_release.py --require-browser
 
 ## CI 交付
 
-core 作业生成库／归档检查结果和编译演示；browser 作业对该演示执行真实 Chromium 检查；candidate 作业依赖两者成功，下载它们的输入并强制 `--require-browser`。它不需要登录 Mooncakes，也不会发布、打标签或创建 GitHub Release。
+core 作业生成库／归档检查结果和编译演示；browser 作业对该演示执行真实 Chromium 检查；registry 作业在全新项目从 Mooncakes 下载已发布 0.1.0，检查 native / JS 消费及核心源码指纹，并上传 `registry-consumer-evidence`。candidate 作业依赖 core、browser、registry 三者成功，下载它们的输入并强制 `--require-browser`。它不需要登录 Mooncakes，也不会发布、打标签或创建 GitHub Release。
 
 每次完整成功运行的 `release-candidate` 产物都包含提交号、源码指纹、注册表包和演示文件的 SHA-256，以及相同提交的 core / browser 记录。
 
@@ -63,6 +63,8 @@ git -C restored-source checkout -b main FETCH_HEAD
 
 ## 服务器预检与正式发布
 
-本轮尝试 `moon publish --dry-run --frozen`，工具在服务器校验前提示 `Registry login is required; run moon login`。因此当前只有本地归档与消费检查通过，不能声明服务器预检通过。
+初次开发环境预检因未登录而停止；随后维护者在 Windows 的全新源码目录完成登录，提供服务器 dry-run `202 Accepted` 与正式发布 `200 OK` 的终端输出，打包及解压后的 `moon check` 均通过。
 
-第三批需完成登录、服务器 dry-run、正式发布及干净外部项目的注册表安装验证。软件包发布和远端消费通过后，再更新 README、版本说明与验收表；不以候选包或 CI 成功替代发布结果。
+本开发环境随后独立执行 `moon view youyong5/moondeform@0.1.0`，注册表返回发布时间 `2026-11-25T09:20:38.555725+00:00`。干净外部项目的 `moon add`、registry 依赖来源检查、native / JS 检查／构建／运行均通过。下载的模块清单、包清单、公开接口和六个核心源码文件与上述提交一致；由于从 Windows 发布，比较仅将 CRLF 规范化为 LF，没有忽略其他字符差异。
+
+注册表中的 0.1.0 与后续提交生成的交付候选应按各自来源提交区分：`registry/` 内的包是当前提交的本地 `moon package` 输出，不能称为已上传的 0.1.0 原归档。远端安装证据独立上传到 CI 的 `registry-consumer-evidence`；最终验收对应见 [ACCEPTANCE](ACCEPTANCE.md)。

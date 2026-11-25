@@ -47,8 +47,8 @@ moonrun 0.1.20261104 (940aa18 2026-11-04)
 ## 未验证或未完成
 
 - 本机受环境限制未完成浏览器 UI 检查；上述真实浏览器结果来自 GitHub Actions。已验证的是 Chromium 的指定视口，尚未覆盖 Safari、Firefox 或实际触摸设备。
-- 未在 Windows/macOS 运行；不宣称这些系统已通过 native 验证。
-- 未发布 Mooncakes，不能用包名假定可以从远端安装。已验证的是本地 workspace 消费。
+- Windows 目前只有维护者提供的打包与解压检查成功输出，未验证 native 运行；macOS 未验证。
+- 0.1.0 的注册表安装与 Linux native / JS 消费已验证，见下方第三批记录。
 - 没有自碰撞、连续碰撞、防翻转、三维材料精度或任意场景稳定性的验证声明。
 
 ## 验收对应
@@ -99,3 +99,15 @@ moonrun 0.1.20261104 (940aa18 2026-11-04)
 本地候选包已实际生成并解压运行 headless 示例，得到 16 粒子、33 约束和约 4 秒模拟；`history.bundle` 在新仓库中恢复到包内声明的原提交成功。候选包内部内容校验值在生成时核对。该本地包如实标注没有本提交的真实浏览器记录，不能替代新的远程 candidate 作业产物。
 
 `moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`，尚未执行服务器校验，也没有进行发布。服务器 dry-run 与注册表安装继续留在第三批。新 CI 的 core / browser / candidate 在 [该批运行](https://github.com/youyong5/MoonDeform/actions/runs/45578351621)中全部成功，对应提交 `51efcbf9f65a2d09327c000eeb1b6da4186e43aa`。候选作业在下载并核对同次运行的真实 Chromium 证据后，实际生成 `MoonDeform-0.1.0-51efcbf9f65a-candidate.zip`（315445 字节，SHA-256 `a63deeeec0e07d634724894abd87332726ef44173289a0bc0dd5bc567ca20d80`），包内浏览器状态为 passed；外部 `release-candidate` 产物已上传候选 ZIP、校验文件和元数据。后续提交由 CI 重新生成各自的指纹与候选，不复用本次文件。
+
+## 初审通过后第三批：发布与注册表独立消费
+
+2026-11-25，维护者在 Windows 提供服务器 dry-run `202 Accepted` 及正式发布 `200 OK` 的终端输出，二者均含打包与解压后的 `moon check` 成功记录。开发环境随后独立执行 `moon view youyong5/moondeform@0.1.0`，返回版本 0.1.0、MIT、项目仓库及发布时间 `2026-11-25T09:20:38.555725+00:00`。
+
+本地 Linux 使用 `moon 0.1.20261104` / `moonc v0.10.20+65efd5b93`，在仓库外全新临时项目中执行 `moon add youyong5/moondeform@0.1.0`。没有 workspace、依赖目录或本地路径覆盖；`moon tree --json` 返回 registry 来源且无 workspace 成员。native 和 JS 分别通过 `moon check --deny-warn`、`moon build --deny-warn` 和实际运行。
+
+消费程序使用公开 API 完成自定义投影、约束元数据、柔度修改与有符号残差验证；另一世界运行 16 粒子、33 约束的弹性环落地 240 帧，检查节点处于平面上方、面积保留在初始值 ±5% 内、时间约 4 秒及报告计数。两目标均输出 `Independent ring OK` 和 `Independent consumer OK`。这属于边界明确的 smoke case，不代表任意软体网格都保持面积或不会穿透。
+
+下载的模块清单、包清单、公开接口及六个核心实现文件，与发布来源提交 `827103b4675e3b51be864070b177af7afc4444cb` 一致。发布来自 Windows，比较仅把 CRLF 规范化为 LF；记录不是原始 ZIP 的哈希。固定版本指纹在 `tests/registry/0.1.0.json`，完整重现入口是 `scripts/registry_check.py`，成功结果在 `artifacts/registry-consumer.json`。后续维护提交新增的脚本、消费案例与文档不属于已上传的 0.1.0 源码归档。
+
+CI 新增独立 registry 作业，实际下载并构建／运行该不可变版本，上传 `registry-consumer-evidence`；candidate 需 core、browser、registry 全部成功。当前源码的四后端物理测试仍由 core 作业验证，不以已发布版本消费代替开发源码测试。

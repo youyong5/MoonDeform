@@ -2,7 +2,7 @@
 
 面向 MoonBit 生态的**二维可变形物理库**。以 XPBD 求解粒子、弹性网格与封闭软体的约束，核心不依赖浏览器、Canvas、游戏引擎或外部原生库。
 
-模块名：`youyong5/moondeform`。当前是开源开发版 **0.1.0，尚未发布到 Mooncakes**。
+模块名：`youyong5/moondeform`。**0.1.0 已于 2026-11-25 发布到 [Mooncakes](https://mooncakes.io/docs/youyong5/moondeform@0.1.0/)**。
 
 源码：[youyong5/MoonDeform](https://github.com/youyong5/MoonDeform)。[持续集成结果](https://github.com/youyong5/MoonDeform/actions/workflows/ci.yml)包含核心四后端验证和真实浏览器检查。
 
@@ -57,7 +57,7 @@ fn main raise {
 }
 ```
 
-安装与源码／候选包接入步骤见 [INSTALL](docs/INSTALL.md)。开发版通过 MoonBit workspace 本地使用，完整独立消费模块位于 `tests/consumer/`，执行 `python3 scripts/consumer_check.py` 可验证它只依赖公开 API。发布后再按实际版本添加 Mooncakes 依赖。
+在已有 MoonBit 项目中执行 `moon add youyong5/moondeform@0.1.0`。完整安装与源码接入步骤见 [INSTALL](docs/INSTALL.md)。`tests/consumer/` 只依赖公开 API；`python3 scripts/registry_check.py` 会在全新外部项目中从注册表下载 0.1.0，核对依赖来源与已发布核心源码，并运行 native / JS 消费检查。`scripts/consumer_check.py` 则检查当前开发源码的 workspace 接入。
 
 ## 自定义约束
 

@@ -21,12 +21,11 @@
 
 ## 第三批：Mooncakes 发布与远端消费验收
 
-- [ ] 完成 Mooncakes 身份验证及服务器 `moon publish --dry-run --frozen`；当前尚无服务器校验通过记录。
-
-- [ ] 将确定版本发布到 Mooncakes，保留实际发布结果与模块链接。
-- [ ] 在干净外部项目中从注册表安装该版本；不通过本地 workspace 或源码路径替代。
-- [ ] 对安装后的版本运行公开 API 示例，验证基本模拟、自定义约束、材料调整与诊断。
-- [ ] 同步 README、验证记录与正式版本说明，逐项核对最终验收要求。
+- [x] 维护者在 Windows 完成登录，提供服务器 dry-run `202 Accepted` 和正式发布 `200 OK` 输出；打包归档及解压后的检查均通过。
+- [x] [youyong5/moondeform@0.1.0](https://mooncakes.io/docs/youyong5/moondeform@0.1.0/) 已发布；开发环境通过 `moon view` 独立查询，注册表发布时间为 2026-11-25 17:20:38（北京时间）。来源提交 `827103b4675e3b51be864070b177af7afc4444cb`。
+- [x] 在干净外部项目中实际 `moon add` 该版本，`moon tree --json` 确认为 registry 来源且无 workspace 成员；下载核心源码与来源提交的 LF 规范化指纹一致。
+- [x] 安装后的 native / JS 检查、构建、运行通过。公开 API 示例验证自定义约束、材料调整、元数据与残差，并运行 16 粒子／33 约束的软体弹性环落地 240 帧，检查接触、面积范围和报告。
+- [x] 同步 README、INSTALL、CHANGELOG、发布与验证记录，按下表核对九项验收要求。新增独立 registry CI 作业与 JSON 证据产物，后续候选依赖该作业成功。
 
 在线静态托管可作为额外展示；可直接运行的单文件演示和可复用库仍是主要交付。当前不扩大到自碰撞、CCD、三维布料或体积材料等范围。
 
@@ -37,9 +36,9 @@
 | MoonBit 主实现与工具链版本 | 核心、构造器及公开 API 均为 MoonBit；实际版本见 `VALIDATION.md` 和 CI 日志 |
 | GitHub 公开、开发记录清晰 | 公开 `main`，按库能力、宿主示例和验证成果提交 |
 | 声明的核心功能可用 | 数值依据、边界与模块划分见 README、`API.md`、`DESIGN.md` |
-| 安装与复现文档 | 源码／workspace 接入已提供；注册表安装待第三批实际验证 |
-| 持续检查、构建与测试 | `ci.yml` 的 core 与 browser 作业；不能用配置存在代替实际运行结果 |
+| 安装与复现文档 | README 与 INSTALL 提供真实注册表安装、公开 API 示例和源码接入；干净消费已运行 |
+| 持续检查、构建与测试 | core / browser / candidate 已实际通过；新增 registry 作业持续检查已发布版本，实际运行链接追加于本页 |
 | 至少一个可运行示例 | headless、custom_constraint、runtime_material、独立消费模块和静态演示 |
 | 核心功能测试 | 四后端测试、上游距离投影对照、解析参考、回调与失败恢复检查 |
-| Mooncakes 发布 | 尚未在本开发流程完成；第三批必须补齐 |
+| Mooncakes 发布 | 0.1.0 已发布，注册表查询与外部安装、运行独立通过 |
 | 开源与上游许可 | MIT；固定上游源码、许可证和改动说明见 `PROVENANCE.md` |
