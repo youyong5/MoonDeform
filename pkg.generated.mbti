@@ -33,6 +33,28 @@ pub(all) struct Config {
 }
 pub fn Config::new(gravity? : Vec2, substeps? : Int32, iterations? : Int32, damping? : Double, restitution? : Double, friction? : Double) -> Self
 
+#derive(Eq, @debug.Debug)
+pub(all) struct ConstraintInfo {
+  kind : ConstraintType
+  particles : Array[Int32]
+  compliance : Double
+  enabled : Bool
+}
+pub fn ConstraintInfo::equal(Self, Self) -> Bool
+pub fn ConstraintInfo::not_equal(Self, Self) -> Bool
+pub fn ConstraintInfo::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) enum ConstraintType {
+  Distance
+  Area
+  Bend
+  Custom
+}
+pub fn ConstraintType::equal(Self, Self) -> Bool
+pub fn ConstraintType::not_equal(Self, Self) -> Bool
+pub fn ConstraintType::to_repr(Self) -> @debug.Repr
+
 pub(all) struct StepReport {
   time : Double
   max_constraint_error : Double
@@ -69,6 +91,7 @@ pub fn World::add_particle(Self, Vec2, mass? : Double, radius? : Double) -> Int3
 pub fn World::add_plane(Self, Vec2, Double) -> Unit raise PhysicsError
 pub fn World::apply_force(Self, Int32, Vec2) -> Unit raise PhysicsError
 pub fn World::constraint_count(Self) -> Int32
+pub fn World::constraint_info(Self, Int32) -> ConstraintInfo raise PhysicsError
 pub fn World::constraint_residual(Self, Int32) -> Double? raise PhysicsError
 pub fn World::grid(Self, Vec2, Int32, Int32, Double, mass? : Double, compliance? : Double, area_compliance? : Double) -> Body raise PhysicsError
 pub fn World::new(config? : Config) -> Self raise PhysicsError

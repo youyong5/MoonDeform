@@ -52,6 +52,38 @@ priv struct Particle {
 pub type ConstraintFunction = (Array[Vec2]) -> (Double, Array[Vec2])
 
 ///|
+/// Public categories for host material controls and unit-aware diagnostics.
+#derive(Eq, @debug.Debug)
+pub(all) enum ConstraintType {
+  Distance
+  Area
+  Bend
+  Custom
+}
+
+///|
+pub extend ConstraintType with Eq::{equal, not_equal}
+
+///|
+pub extend ConstraintType with @debug.Debug::{to_repr}
+
+///|
+/// A detached metadata snapshot. Particle handles belong to the source world.
+#derive(Eq, @debug.Debug)
+pub(all) struct ConstraintInfo {
+  kind : ConstraintType
+  particles : Array[Int32]
+  compliance : Double
+  enabled : Bool
+}
+
+///|
+pub extend ConstraintInfo with Eq::{equal, not_equal}
+
+///|
+pub extend ConstraintInfo with @debug.Debug::{to_repr}
+
+///|
 priv enum ConstraintKind {
   Distance(Double)
   Area(Double)

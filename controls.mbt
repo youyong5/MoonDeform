@@ -9,6 +9,30 @@ fn World::check_constraint_id(
 }
 
 ///|
+/// Read constraint metadata without evaluating callbacks or advancing time.
+/// The returned particle array is a copy, including for disabled constraints.
+pub fn World::constraint_info(
+  self : World,
+  id : Int32,
+) -> ConstraintInfo raise PhysicsError {
+  self.check_idle()
+  self.check_constraint_id(id)
+  let constraint = self.constraints[id]
+  let kind = match constraint.kind {
+    Distance(_) => ConstraintType::Distance
+    Area(_) => ConstraintType::Area
+    Bend(_) => ConstraintType::Bend
+    Custom(_) => ConstraintType::Custom
+  }
+  {
+    kind,
+    particles: constraint.ids.copy(),
+    compliance: constraint.compliance,
+    enabled: constraint.enabled,
+  }
+}
+
+///|
 /// Change compliance between frames without replacing a constraint or its handles.
 /// The value must be finite and nonnegative; a rejected update changes nothing.
 pub fn World::set_constraint_compliance(

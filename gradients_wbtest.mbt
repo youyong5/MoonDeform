@@ -1,7 +1,7 @@
 ///|
 test "area and bend analytical gradients agree with central differences" {
   let p = [Vec2::new(0.3, 0.2), Vec2::new(1.8, 0.4), Vec2::new(0.7, 1.9)]
-  let kinds = [Area(0.6), Bend(0.3), Distance(1.0)]
+  let kinds : Array[ConstraintKind] = [Area(0.6), Bend(0.3), Distance(1.0)]
   for kind in kinds {
     let points = match kind {
       Distance(_) => [p[0], p[1]]
