@@ -31,5 +31,33 @@ fn main raise {
   if world.constraint_residual(constraint) != Some(0.5) {
     abort("consumer signed residual failed")
   }
+  let falling = @deform.World::new()
+  falling.add_plane(@deform.Vec2::new(0.0, 1.0), 0.0)
+  let ring = falling.soft_ring(@deform.Vec2::new(0.0, 2.5), 0.6, 16)
+  let initial_area = @deform.signed_area(
+    ring.particles.map(id => falling.position(id)),
+  )
+  for _ in 0..<240 {
+    ignore(falling.step(1.0 / 60.0))
+  }
+  let final_area = @deform.signed_area(
+    ring.particles.map(id => falling.position(id)),
+  )
+  // A bounded smoke case, not a guarantee for arbitrary meshes or impacts.
+  if !(final_area > initial_area * 0.95 && final_area < initial_area * 1.05) {
+    abort("consumer ring area failed")
+  }
+  for id in ring.particles {
+    let p = falling.position(id)
+    if !(p.y >= 0.0 && p.y < 2.0 && p.x.abs() < 2.0) {
+      abort("consumer ring plane contact failed")
+    }
+  }
+  let report = falling.report()
+  if report.particle_count != 16 || report.constraint_count != 33 ||
+    (report.time - 4.0).abs() > 0.000001 {
+    abort("consumer ring diagnostics failed")
+  }
+  println("Independent ring OK: 16 particles, 33 constraints, 240 frames")
   println("Independent consumer OK: x=\{point.x}, y=\{point.y}")
 }

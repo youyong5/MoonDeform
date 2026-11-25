@@ -1,0 +1,17 @@
+{
+  "module": "youyong5/moondeform",
+  "version": "0.1.0",
+  "source_commit": "827103b4675e3b51be864070b177af7afc4444cb",
+  "normalization": "CRLF to LF only; published from Windows",
+  "lf_sha256": {
+    "moon.mod": "cbdbf5e74b29f71461de17c6514a0437268e956784fc0dad6a9d78982f5294e2",
+    "moon.pkg": "1853743e049ab52631ad890c42ef646cb94b1919f77fa34b6f20fcfe2f572a41",
+    "pkg.generated.mbti": "7d76b37a3747c2d08cd8632a767f4cef99908ee82b9fad437e742908faa7fbde",
+    "builders.mbt": "2f367e047bc0692ed4bbc9213ed80a798abef9fc3a00b7fe14035fff536d9284",
+    "constraints.mbt": "1bc02498cb2cbf07d41aa8f372771c9cd0c1e72734a316795f85e0b76d2c95a2",
+    "controls.mbt": "30cab112108b2adbdebb5d7a89103e8534c01d7fede79e60df48f93951761beb",
+    "math.mbt": "6e2c86f5d90e2660c0b80be1baea3d4f494f8c0193ee161c22490fd2a58d0919",
+    "types.mbt": "0fbd1ab6d4a85da18c41e3a4c18fc566e44abab4d01450d9bdc239544bbf2734",
+    "world.mbt": "4411e21b36954a5b8890bf4b54bf822d8be01fab21c06af03984f21ea828a723"
+  }
+}
