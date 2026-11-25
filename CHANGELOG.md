@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add detached typed constraint metadata for material controls and host diagnostics.
+- Apply playground material changes in place, preserving motion and keeping bending independent.
+- Extend independent consumers and real-browser regression checks for the new host workflow.
+
 - Allow material compliance changes between frames without replacing topology or handles.
 - Expose signed residual queries per constraint, skipping disabled callbacks and guarding reentry.
 - Add a runtime material consumer with analytic steady-load checks on native and JavaScript.

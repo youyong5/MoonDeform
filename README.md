@@ -78,7 +78,7 @@ ignore(world.add_custom([id], fn(points) {
 
 ## 运行时材料与诊断
 
-宿主可在帧间调用 `set_constraint_compliance(id, value)` 修改材料，保留拓扑、句柄与目标形状；`constraint_residual(id)` 返回单个约束的有符号残差，禁用项返回 `None`。这支持编辑器调参、批量材料试验和按约束类型监测误差，无需绑定特定产品或渲染器。
+宿主可通过 `constraint_info(id)` 读取类型、粒子句柄副本、柔度和启用状态，无需依赖模型构造器的插入顺序。在帧间调用 `set_constraint_compliance(id, value)` 可修改材料，保留拓扑、句柄与目标形状；`constraint_residual(id)` 返回单个约束的有符号残差，禁用项返回 `None`。这支持编辑器调参、批量材料试验和按约束类型监测误差，无需绑定特定产品或渲染器。
 
 [运行时材料示例](examples/runtime_material/README.md) 在同一个受载弹簧上切换两种柔度，再切回硬约束，逐阶段检查理论伸长量：`moon run examples/runtime_material --target native`。
 
@@ -91,7 +91,7 @@ python3 -m http.server 8765 --directory dist
 
 也可以直接双击构建后的 `dist/MoonDeform-demo.html`，无需启动服务器。
 
-打开 `http://localhost:8765`。演示使用真实 MoonBit 编译产物，可切换弹性环、绳索、网格，修改柔度，暂停／单步或拖动节点。JavaScript 负责页面、绘图和时间驱动，物理求解在 MoonBit 内。
+打开 `http://localhost:8765`。演示使用真实 MoonBit 编译产物，可切换弹性环、绳索、网格，修改柔度，暂停／单步或拖动节点。调参即时生效，保留当前运动状态；仅切换场景或显式重置才重新建模。页面单独展示距离约束残差，弯曲柔度保持独立。JavaScript 负责页面、绘图和时间驱动，物理求解在 MoonBit 内。接入细节见 [静态宿主示例](examples/browser/README.md)。
 
 `dist/` 构建结果只有 HTML 与 JS，可部署到普通静态托管，无后端、账号、服务密钥或 CDN 依赖。
 
@@ -108,7 +108,7 @@ python3 -m http.server 8765 --directory dist
 
 ## 验证与维护
 
-推荐执行 `python3 scripts/check_release.py`，任一步失败即停止。检查会实际生成格式化源码与公开接口；若有漂移或新示例接口尚未跟踪，会输出可复核的生成结果并要求提交后重跑。当前四个核心后端各有 **49 项测试**通过，其中一项包含 40 组固定上游距离投影对照。除受载弹簧稳态伸长外，还验证自由落体收敛、内部约束下的线动量、接触耗散及自定义残差缩放的解析响应；运行时材料和逐约束诊断另覆盖有效／无效更新、禁用状态与回调生命周期。
+推荐执行 `python3 scripts/check_release.py`，任一步失败即停止。检查会实际生成格式化源码与公开接口；若有漂移或新示例接口尚未跟踪，会输出可复核的生成结果并要求提交后重跑。当前四个核心后端各有 **52 项测试**通过，其中一项包含 40 组固定上游距离投影对照。除受载弹簧稳态伸长外，还验证自由落体收敛、内部约束下的线动量、接触耗散及自定义残差缩放的解析响应；运行时材料和逐约束诊断另覆盖有效／无效更新、禁用状态与回调生命周期。
 
 
 ```sh
@@ -124,7 +124,7 @@ node scripts/bridge_check.cjs
 
 上游对照脚本需要 Python 与 C++ 编译器，仅用于维护，不是库的运行依赖。可选真实浏览器测试见 `scripts/browser_check.cjs`。CI 工作流已提供；远程执行状态与本地验证是分开记录的。
 
-更多资料：[贡献指南](CONTRIBUTING.md) · [首次 GitHub 发布](docs/GITHUB_RELEASE.md) · [架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
+更多资料：[最终验收推进](docs/ACCEPTANCE.md) · [贡献指南](CONTRIBUTING.md) · [首次 GitHub 发布](docs/GITHUB_RELEASE.md) · [架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
 
 ## License
 
