@@ -1,0 +1,15 @@
+# Publishing uses this policy instead of .gitignore at this directory.
+_build/
+.mooncakes/
+node_modules/
+dist/
+artifacts/
+__pycache__/
+*.pyc
+*.log
+history.bundle
+package-lock.json
+moon.work
+moon.work.sum
+!/.moonignore
+!/.gitignore
