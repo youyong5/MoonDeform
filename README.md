@@ -57,7 +57,7 @@ fn main raise {
 }
 ```
 
-开发版通过 MoonBit workspace 本地使用，完整独立消费模块位于 `tests/consumer/`，执行 `python3 scripts/consumer_check.py` 可验证它只依赖公开 API。发布后再按实际版本添加 Mooncakes 依赖。
+安装与源码／候选包接入步骤见 [INSTALL](docs/INSTALL.md)。开发版通过 MoonBit workspace 本地使用，完整独立消费模块位于 `tests/consumer/`，执行 `python3 scripts/consumer_check.py` 可验证它只依赖公开 API。发布后再按实际版本添加 Mooncakes 依赖。
 
 ## 自定义约束
 
@@ -124,7 +124,7 @@ node scripts/bridge_check.cjs
 
 上游对照脚本需要 Python 与 C++ 编译器，仅用于维护，不是库的运行依赖。可选真实浏览器测试见 `scripts/browser_check.cjs`。CI 工作流已提供；远程执行状态与本地验证是分开记录的。
 
-更多资料：[最终验收推进](docs/ACCEPTANCE.md) · [贡献指南](CONTRIBUTING.md) · [首次 GitHub 发布](docs/GITHUB_RELEASE.md) · [架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
+更多资料：[发布候选与交付包](docs/RELEASE.md) · [最终验收推进](docs/ACCEPTANCE.md) · [贡献指南](CONTRIBUTING.md) · [首次 GitHub 发布](docs/GITHUB_RELEASE.md) · [架构与差异](docs/DESIGN.md) · [上游选择](docs/UPSTREAM.md) · [来源声明](docs/PROVENANCE.md) · [验证记录](docs/VALIDATION.md)。
 
 ## License
 

@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 candidate — 2026-11-25 (not yet published)
+
+- Audit the real registry archive and verify independent consumers and rebuilt demos from a clean extraction.
+- Bind release candidates to exact source, commit, demo and Chromium evidence; add content checksums.
+- Add an automatic candidate artifact after both core and browser jobs pass; publication remains a separate step.
 
 - Add detached typed constraint metadata for material controls and host diagnostics.
 - Apply playground material changes in place, preserving motion and keeping bending independent.
@@ -12,7 +16,7 @@
 - Extend input-validation, atomic-update and diagnostic-lifecycle regression coverage; 49 tests pass on each of four backends.
 - Detect missing generated interfaces and print canonical review content when source formatting or interfaces drift.
 
-## 0.1.0 — 2026-11-24 (local development release)
+### Initial development — 2026-11-24
 
 - Port the distance projection from a pinned MIT-licensed PositionBasedDynamics commit.
 - Add renderer-independent 2D particle integration and scalar XPBD constraints.

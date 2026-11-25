@@ -25,6 +25,14 @@ jobs:
           name: static-playground
           path: dist/
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-core-inputs
+          path: |
+            artifacts/local-gates.json
+            artifacts/package-audit.json
+            artifacts/youyong5-moondeform-*.zip
+          if-no-files-found: error
   browser:
     needs: core
     runs-on: ubuntu-latest
@@ -43,4 +51,39 @@ jobs:
           npm install --no-save playwright@1.62.1
           npx playwright install --with-deps chromium
       - name: Static site and standalone artifact
-        run: node scripts/browser_check.cjs
+        run: python3 scripts/check_browser.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-browser-evidence
+          path: artifacts/browser-gates.json
+          if-no-files-found: error
+  candidate:
+    needs: [core, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-core-inputs
+          path: artifacts/
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-browser-evidence
+          path: artifacts/
+      - uses: actions/download-artifact@v4
+        with:
+          name: static-playground
+          path: dist/
+      - name: Export a candidate with matching real-browser evidence
+        run: python3 scripts/package_release.py --require-browser
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-candidate
+          path: |
+            artifacts/MoonDeform-*-candidate.zip
+            artifacts/MoonDeform-*-candidate.zip.sha256
+            artifacts/release-candidate.json
+          if-no-files-found: error
