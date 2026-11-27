@@ -33,7 +33,7 @@
 
 | 要求 | 现有证据／剩余事项 |
 | --- | --- |
-| MoonBit 主实现与工具链版本 | 核心、构造器及公开 API 均为 MoonBit；实际版本见 `VALIDATION.md` 和 CI 日志 |
+| MoonBit 主实现与工具链版本 | 核心、构造器及公开 API 均为 MoonBit；2026-11-27 使用 `moonc v1.0.0-rc1+3c0520448` 完整验证，满足新版最低版本要求；详见 `VALIDATION.md` |
 | GitHub 公开、开发记录清晰 | 公开 `main`，按库能力、宿主示例和验证成果提交 |
 | 声明的核心功能可用 | 数值依据、边界与模块划分见 README、`API.md`、`DESIGN.md` |
 | 安装与复现文档 | README 与 INSTALL 提供真实注册表安装、公开 API 示例和源码接入；干净消费已运行 |
@@ -48,3 +48,9 @@
 [完整 CI 运行](https://github.com/youyong5/MoonDeform/actions/runs/45585871982)对应提交 `ddf3ba5685fe9c5d6d1d49589031d4b073ffc0b2`。core、browser、registry、candidate 四作业全部成功：官方 stable 工具链 `moon 0.1.20261119` / `moonc v0.10.22+124d61d05`，四后端各 52 项测试通过；桌面与移动页面交互、已发布版本的独立安装消费、交付候选导出均完成。注册表消费证据见同次运行的 [registry-consumer-evidence](https://github.com/youyong5/MoonDeform/actions/runs/45585871982/artifacts/15008049111)。
 
 九项开发交付要求均已有对应实现或可复核证据；这份检查不代替赛事评委的最终评审结论。
+
+## 2026-11-27：按新版工具链门槛复核
+
+本轮验收第一项已改为 `moonc >= 1.0.0-rc1`。先前 `0.10.22` 的成功记录属于历史验证，不能作为新版本门槛的证明。现已下载官方发行的工具链并核对编译器归档 SHA-256，在隔离的相同提交源码中重新完成全部本地发布检查，以及已发布 0.1.0 的干净注册表消费。实际编译器为 `moonc v1.0.0-rc1+3c0520448`；四后端各 52 项通过，native / JS 安装、构建与运行通过。未修改核心实现、公开 API 或模块版本。
+
+其余八项继续对应上方源码、README、示例、测试、CI、Mooncakes 发布及许可记录。更新本记录会触发主分支 CI；远程结果以该提交的实际作业日志为准。

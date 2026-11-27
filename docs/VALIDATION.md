@@ -1,6 +1,6 @@
 # 验证记录
 
-验证日期：2026-11-24。环境：Linux x86-64；Node v24.22.3；系统 g++。
+验证日期：2026-11-24 至 2026-11-27（各阶段结果分别记录）。环境：Linux x86-64；Node v24.22.3；系统 g++。
 
 ## 实际工具链
 
@@ -113,3 +113,24 @@ moonrun 0.1.20261104 (940aa18 2026-11-04)
 CI 新增独立 registry 作业，实际下载并构建／运行该不可变版本，上传 `registry-consumer-evidence`；candidate 需 core、browser、registry 全部成功。当前源码的四后端物理测试仍由 core 作业验证，不以已发布版本消费代替开发源码测试。
 
 第三批远程验证在 [运行 45585871982](https://github.com/youyong5/MoonDeform/actions/runs/45585871982) 全部成功，对应提交 `ddf3ba5685fe9c5d6d1d49589031d4b073ffc0b2`。core 使用官方 stable `moon 0.1.20261119` / `moonc v0.10.22+124d61d05`，四后端各 52 项通过；registry 在干净 CI 环境实际消费 0.1.0 的 native / JS，浏览器交互与 candidate 导出也通过。消费证据作为独立 `registry-consumer-evidence` 产物上传。
+
+## 2026-11-27：MoonBit 1.0.0-rc1 兼容性复核
+
+按照新版验收的最低版本门槛，从官方 latest 下载编译器与匹配 core，并核对官方提供的编译器归档 SHA-256：`113527a9037fe12e463e6ac1e7698116bf703730243096328e4ac7e2774307c0`。安装在独立目录，不覆盖旧工具链。实际版本：
+
+```text
+moon 0.1.20261126 (ccd306a 2026-11-26)
+moonc v1.0.0-rc1+3c0520448 (2026-11-26)
+moonrun 0.1.20261126 (ccd306a 2026-11-26)
+```
+
+在 `8ee4e96f3c16d997ad33d9733e69b6e45cb12345` 的隔离源码目录执行 `MOON=<新版 moon 路径> python3 scripts/check_release.py`，完整通过：
+
+- 格式与生成公开接口无漂移；四后端检查／构建均通过 `--deny-warn`，四后端各 52 项测试通过。
+- 固定上游 C++ 距离内核的 40 组参考对照通过；workspace 独立消费在 native / JS 运行成功。
+- 无界面、自定义圆形轨道、运行时材料切换示例及三个场景的 Node 桥接检查通过。
+- 8 项 Python 发布证据检查通过；实际打包、干净解压后的 native / JS 消费、演示重建及桥接检查通过。
+
+另以相同新版工具链执行 `scripts/registry_check.py`，在全新项目实际安装 `youyong5/moondeform@0.1.0`：依赖来源为 registry，native / JS 检查、构建和公开 API 运行通过；已发布核心源码的规范化指纹与固定版本记录一致。`moon view` 确认 0.1.0 仍公开可用。
+
+无需修改物理核心或重新发布 0.1.0。上述是本地 Linux 的新版验证；真实浏览器的新版编译产物由本次文档提交触发的 CI 继续检查，不能把此前 0.10.22 的浏览器记录标作本轮结果。workspace 临时工程生成时工具输出 `is-main` 弃用提示，但源码检查／构建的 `--deny-warn` 均通过。

@@ -30,7 +30,7 @@ moon test --target all --deny-warn
 moon run examples/headless --target native
 ```
 
-实际验证的工具链与测试范围见 [VALIDATION](docs/VALIDATION.md)。库的运行依赖只有 MoonBit 标准库；核心不需要 npm、CMake、Eigen 或 Python。native 后端本身需要系统 C 编译器。
+本轮验收使用 **`moonc v1.0.0-rc1+3c0520448`** 实测通过，满足 `moonc >= 1.0.0-rc1` 的要求。实际验证的工具链与测试范围见 [VALIDATION](docs/VALIDATION.md)。库的运行依赖只有 MoonBit 标准库；核心不需要 npm、CMake、Eigen 或 Python。native 后端本身需要系统 C 编译器。
 
 ## 公共 API 示例
 
